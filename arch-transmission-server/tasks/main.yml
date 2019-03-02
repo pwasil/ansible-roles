@@ -1,0 +1,37 @@
+---
+
+- name: Make sure the tramsmission server package is installed
+  pacman:
+    name: transmission-cli
+    state: present
+
+- name: Start and stop transmission to init config files
+  systemd:
+    name: transmission
+    state: "{{ item }}"
+  loop:
+    - "started"
+    - "stopped"
+
+- name: Create torrent directories
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: "{{ transmission_server_user }}"
+    group: "{{ transmission_server_group }}"
+    mode: 0750
+  loop:
+    - '{{ transmission_server_watch_dir }}'
+    - '{{ transmission_server_download_dir }}'
+    - '{{ transmission_server_incomplete_dir }}'
+
+- name: Write config file
+  template:
+    src: templates/settings.json.j2
+    dest: /var/lib/transmission/.config/transmission-daemon/settings.json
+
+- name: Start transmission daemon
+  systemd:
+    name: transmission.service
+    state: started
+    enabled: yes

@@ -1,0 +1,18 @@
+---
+
+transmission_server_user: "transmission"
+transmission_server_group: "transmission"
+
+transmission_server_blocklist_url: "http://john.bitsurge.net/public/biglist.p2p.gz"
+
+transmission_server_download_dir: "/home/transmission/downloads"
+transmission_server_incomplete_dir: "/home/transmission/incomplete/"
+transmission_server_watch_dir: "/home/transmission/watchdir"
+
+transmission_server_speed_limit_down: 4096
+transmission_server_speed_limit_up: 32
+
+transmission_server_rpc_username: "transmission"
+transmission_server_rpc_password: "transmission"
+transmission_server_rpc_whitelist:
+  - "127.0.0.1"
