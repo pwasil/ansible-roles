@@ -1,0 +1,23 @@
+---
+
+- name: Install main graphical shell packages
+  become: yes
+  pacman:
+    name: "{{ gui_main_packages | join(' ') }}"
+    state: present
+  environment: "{{ environment_proxy }}"
+
+- name: Install additional tools
+  become: yes
+  pacman:
+    name: "{{ gui_extra_packages | join(' ')}}"
+    state: present
+  environment: "{{ environment_proxy }}"
+
+- name: Start and enable graphical shell services
+  become: yes
+  systemd:
+    name: "{{ item }}.service"
+    state: started
+    enabled: yes
+  loop: "{{ gui_services }}"

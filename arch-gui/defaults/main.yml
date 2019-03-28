@@ -1,0 +1,37 @@
+---
+
+environment_proxy:
+
+gui_name: "mate"
+
+gui_preset_configs:
+  mate:
+    packages:
+      - xorg-server
+      - mate
+      - mate-extra
+      - lightdm
+      - lightdm-gtk-greeter
+    services:
+      - lightdm
+      - NetworkManager
+  gnome:
+    packages:
+      - gnome
+      - gnome-extra
+      - gdm
+    services:
+      - gdm
+      - NetworkManager
+
+
+gui_main_packages: "{{ gui_preset_configs[gui_name]['packages'] }}"
+gui_services: "{{ gui_preset_configs[gui_name]['services'] }}"
+
+gui_extra_packages:
+  - networkmanager
+  - network-manager-applet
+  - networkmanager-openvpn
+  - qt4
+  - vlc
+
