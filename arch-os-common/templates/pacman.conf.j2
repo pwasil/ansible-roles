@@ -1,0 +1,20 @@
+
+{{ ansible_managed | comment }}
+
+[options]
+HoldPkg = pacman glibc
+Architecture = {{ os_base_pacman_arch }}
+UseSyslog
+Color
+TotalDownload
+CheckSpace
+VerbosePkgLists
+SigLevel = Required DatabaseOptional
+LocalFileSigLevel = Optional
+RemoteFileSigLevel = Required
+
+{% for repo in os_base_pacman_repos %}
+[{{ repo.name }}]
+Include = {{ repo.mirrorlist }}
+
+{% endfor %}

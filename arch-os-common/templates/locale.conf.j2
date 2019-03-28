@@ -1,0 +1,7 @@
+
+{{ ansible_managed | comment }}
+
+{% for key, val in os_base_file_locale_conf.items() %}
+{{ key | upper }}={{ os_base_file_locale_gen[val]['lang'] }}_{{ os_base_file_locale_gen[val]['territory'] }}.{{ os_base_file_locale_gen[val]['modifier'] }}
+{% endfor %}
+
