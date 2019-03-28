@@ -1,6 +1,9 @@
 ---
 
-sshd_listen_port: 22
+ssh_listen_address: "0.0.0.0"
+ssh_listen_port: "22"
+ssh_address_family: "inet"
+ssh_compression: "no"
 
 ssh_allowed_ciphers:
   - aes256-ctr

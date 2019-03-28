@@ -1,6 +1,7 @@
 ---
 
 - name: restart_sshd
+  become: yes
   systemd:
     name: sshd.service
     state: restarted
