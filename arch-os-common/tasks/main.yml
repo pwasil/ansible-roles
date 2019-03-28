@@ -1,0 +1,60 @@
+---
+
+- name: Set hostname
+  become: yes
+  hostname:
+    name: "{{ os_base_hostname }}"
+
+- name: Set timezone
+  become: yes
+  timezone:
+    name: "{{ os_base_timezone }}"
+
+- name: Template file /etc/locale.gen
+  become: yes
+  template:
+    src: "locale.gen.j2"
+    dest: "/etc/locale.gen"
+    owner: root
+    group: root
+    mode: 0644
+  register: file_locale_gen
+
+- name: Generate locales if there were changes
+  become: yes
+  command: locale-gen
+  register: generate_locales_result
+  failed_when: "'failed' in generate_locales_result.stderr"
+  when: file_locale_gen.changed
+
+- name: Template file /etc/locale.conf
+  become: yes
+  template:
+    src: "locale.conf.j2"
+    dest: "/etc/locale.conf"
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Template other configs
+  become: yes
+  template:
+    src: "{{ item.name }}.j2"
+    dest: "{{ item.dest }}/{{ item.name }}"
+  loop: "{{ os_base_templates }}"
+
+- name: Reload package lists and install base OS packages
+  become: yes
+  pacman:
+    update_cache: yes
+    name: "{{ os_base_packages | join(' ') }}"
+    state: present
+  environment: "{{ environment_proxy }}"
+
+- name: Start services
+  become: yes
+  systemd:
+    name: "{{ item }}.service"
+    state: started
+    enabled: yes
+  loop: "{{ os_base_start_services }}"

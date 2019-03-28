@@ -1,0 +1,7 @@
+
+{{ ansible_managed | comment }}
+
+{% for key, val in os_base_file_locale_gen.items() %}
+{{ val.lang }}_{{ val.territory }}.{{ val.codeset }} {{ val.modifier }}
+{% endfor %}
+
