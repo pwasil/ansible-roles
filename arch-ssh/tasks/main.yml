@@ -1,22 +1,32 @@
 ---
 
 - name: Make sure OpenSSH is installed
+  become: yes
   pacman:
     name: openssh
     state: present
 
 - name: Write SSH client config
+  become: yes
   template:
     src: "templates/ssh_config.j2"
     dest: "/etc/ssh/ssh_config"
+    owner: root
+    group: root
+    mode: 0644
 
 - name: Write SSH server config
+  become: yes
   template:
     src: "templates/sshd_config.j2"
     dest: "/etc/ssh/sshd_config"
+    owner: root
+    group: root
+    mode: 0600
   notify: restart_sshd
 
 - name: Make sure SSH server is started and enabled
+  become: yes
   systemd:
     name: sshd.service
     state: started
